@@ -47,12 +47,25 @@ const router = express.Router();
  *           format: date-time
  *           example: "2026-03-07T15:00:00.000Z"
  *
- *     UserCreateUpdate:
+ *     UserCreate:
  *       type: object
  *       required:
  *         - name
  *         - email
  *         - password
+ *       properties:
+ *         name:
+ *           type: string
+ *           example: "Judit"
+ *         email:
+ *           type: string
+ *           example: "judit@gmail.com"
+ *         password:
+ *           type: string
+ *           example: "password123"
+ *
+ *     UserUpdate:
+ *       type: object
  *       properties:
  *         name:
  *           type: string
@@ -86,7 +99,7 @@ const router = express.Router();
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/UserCreateUpdate'
+ *             $ref: '#/components/schemas/UserCreate'
  *     responses:
  *       201:
  *         description: Creado
@@ -146,7 +159,7 @@ router.get('/', controller.readAll);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/UserCreateUpdate'
+ *             $ref: '#/components/schemas/UserUpdate'
  *     responses:
  *       200:
  *         description: Actualizado

@@ -1,6 +1,5 @@
 import Joi, { ObjectSchema } from 'joi';
 import { NextFunction, Request, Response } from 'express';
-import { IUser } from '../models/User';
 import Logging from '../library/Logging';
 
 export const ValidateJoi = (schema: ObjectSchema) => {
@@ -32,6 +31,34 @@ export const Schemas = {
             completedRoutes: Joi.array()
                 .items(Joi.string().pattern(/^[0-9a-fA-F]{24}$/))
                 .optional()
+        }).min(1)
+    },
+
+    Route: {
+        create: Joi.object({
+            title: Joi.string().required(),
+            description: Joi.string().required(),
+            city: Joi.string().required(),
+            country: Joi.string().required(),
+            distance: Joi.number().required(),
+            duration: Joi.number().required(),
+            difficulty: Joi.string().valid('easy', 'medium', 'hard').required(),
+            tags: Joi.array().items(Joi.string()).optional(),
+            image: Joi.string().optional(),
+            authorId: Joi.string().pattern(/^[0-9a-fA-F]{24}$/).required()
+        }),
+
+        update: Joi.object({
+            title: Joi.string().optional(),
+            description: Joi.string().optional(),
+            city: Joi.string().optional(),
+            country: Joi.string().optional(),
+            distance: Joi.number().optional(),
+            duration: Joi.number().optional(),
+            difficulty: Joi.string().valid('easy', 'medium', 'hard').optional(),
+            tags: Joi.array().items(Joi.string()).optional(),
+            image: Joi.string().optional(),
+            authorId: Joi.string().pattern(/^[0-9a-fA-F]{24}$/).optional()
         }).min(1)
     }
 };
