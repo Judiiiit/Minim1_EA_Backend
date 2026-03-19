@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import PointService from '../services/Point';
+import { parsePagination } from '../library/Pagination';
 
 const createPoint = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -25,7 +26,8 @@ const readPoint = async (req: Request, res: Response, next: NextFunction) => {
 
 const readAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const points = await PointService.getAllPoints();
+        const pagination = parsePagination(req.query);
+        const points = await PointService.getAllPoints(pagination);
         return res.status(200).json(points);
     } catch (error) {
         return res.status(500).json({ error });

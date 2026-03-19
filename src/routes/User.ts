@@ -8,7 +8,7 @@ const router = express.Router();
  * @openapi
  * tags:
  *   - name: users
- *     description: Endpoints CRUD de Users
+ *     description: CRUD endpoints for Users
  *
  * components:
  *   schemas:
@@ -17,7 +17,7 @@ const router = express.Router();
  *       properties:
  *         _id:
  *           type: string
- *           description: ObjectId de MongoDB
+ *           description: MongoDB ObjectId
  *           example: "65f1c2a1b2c3d4e5f6789012"
  *         name:
  *           type: string
@@ -97,8 +97,56 @@ const router = express.Router();
 /**
  * @openapi
  * /users:
+ *   get:
+ *     summary: List all Users
+ *     tags: [users]
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         required: false
+ *         schema:
+ *           type: integer
+ *           enum: [10, 25, 50]
+ *         description: Page size. Use together with page to enable pagination.
+ *       - in: query
+ *         name: page
+ *         required: false
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *         description: Page number. Use together with limit to enable pagination.
+ *     responses:
+ *       200:
+ *         description: OK. If limit and page are omitted, returns the full list.
+ */
+router.get('/', controller.readAll);
+
+/**
+ * @openapi
+ * /users/{userId}:
+ *   get:
+ *     summary: Get a User by ID
+ *     tags: [users]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: User ObjectId
+ *     responses:
+ *       200:
+ *         description: OK
+ *       404:
+ *         description: Not found
+ */
+router.get('/:userId', controller.readUser);
+
+/**
+ * @openapi
+ * /users:
  *   post:
- *     summary: Crea un User
+ *     summary: Create a User
  *     tags: [users]
  *     requestBody:
  *       required: true
@@ -108,50 +156,18 @@ const router = express.Router();
  *             $ref: '#/components/schemas/UserCreate'
  *     responses:
  *       201:
- *         description: Creado
+ *         description: Created
  *       422:
- *         description: Validación fallida (Joi)
+ *         description: Validation failed (Joi)
  */
 router.post('/', ValidateJoi(Schemas.User.create), controller.createUser);
 
-/**
- * @openapi
- * /users:
- *   get:
- *     summary: Lista todos los Users
- *     tags: [users]
- *     responses:
- *       200:
- *         description: OK
- */
-router.get('/', controller.readAll);
-
-/**
- * @openapi
- * /users/{userId}:
- *   get:
- *     summary: Obtiene un User por ID
- *     tags: [users]
- *     parameters:
- *       - in: path
- *         name: userId
- *         required: true
- *         schema:
- *           type: string
- *         description: ObjectId del User
- *     responses:
- *       200:
- *         description: OK
- *       404:
- *         description: No encontrado
- */
-router.get('/:UserId', controller.readUser);
 
 /**
  * @openapi
  * /users/{userId}:
  *   put:
- *     summary: Actualiza un User por ID
+ *     summary: Update a User by ID
  *     tags: [users]
  *     parameters:
  *       - in: path
@@ -159,7 +175,7 @@ router.get('/:UserId', controller.readUser);
  *         required: true
  *         schema:
  *           type: string
- *         description: ObjectId del User
+ *         description: User ObjectId
  *     requestBody:
  *       required: true
  *       content:
@@ -168,19 +184,19 @@ router.get('/:UserId', controller.readUser);
  *             $ref: '#/components/schemas/UserUpdate'
  *     responses:
  *       200:
- *         description: Actualizado
+ *         description: Updated
  *       404:
- *         description: No encontrado
+ *         description: Not found
  *       422:
- *         description: Validación fallida (Joi)
+ *         description: Validation failed (Joi)
  */
-router.put('/:UserId', ValidateJoi(Schemas.User.update), controller.updateUser);
+router.put('/:userId', ValidateJoi(Schemas.User.update), controller.updateUser);
 
 /**
  * @openapi
  * /users/{userId}:
  *   delete:
- *     summary: Elimina un User por ID
+ *     summary: Delete a User by ID
  *     tags: [users]
  *     parameters:
  *       - in: path
@@ -188,13 +204,13 @@ router.put('/:UserId', ValidateJoi(Schemas.User.update), controller.updateUser);
  *         required: true
  *         schema:
  *           type: string
- *         description: ObjectId del User
+ *         description: User ObjectId
  *     responses:
  *       200:
  *         description: OK
  *       404:
- *         description: No encontrado
+ *         description: Not found
  */
-router.delete('/:UserId', controller.deleteUser);
+router.delete('/:userId', controller.deleteUser);
 
 export default router;

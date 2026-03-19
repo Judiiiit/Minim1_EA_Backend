@@ -8,7 +8,7 @@ const options: Options = {
     info: {
       title: 'EA Proyecto',
       version: '1.0.0',
-      description: 'API REST de Users',
+      description: 'Users REST API',
     },
     servers: [
       {
@@ -17,7 +17,6 @@ const options: Options = {
     ],
   },
 
-  // IMPORTANTE: leer los .js compilados en build/routes
   apis: [path.join(__dirname, 'routes', '*.js')],
 };
 

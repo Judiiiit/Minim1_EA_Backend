@@ -9,7 +9,7 @@ function runSeedScript(scriptFileName: string): Promise<void> {
         });
 
         child.on('error', (error) => {
-            reject(new Error(`No se pudo ejecutar ${scriptFileName}: ${String(error)}`));
+            reject(new Error(`Could not run ${scriptFileName}: ${String(error)}`));
         });
 
         child.on('close', (code) => {
@@ -18,7 +18,7 @@ function runSeedScript(scriptFileName: string): Promise<void> {
                 return;
             }
 
-            reject(new Error(`${scriptFileName} finalizo con codigo ${String(code)}`));
+            reject(new Error(`${scriptFileName} finished with exit code ${String(code)}`));
         });
     });
 }
@@ -30,7 +30,7 @@ async function seedBackend() {
         await runSeedScript('seedPoints.js');
         process.exit(0);
     } catch (error) {
-        console.error(`Error al ejecutar seedBackend: ${String(error)}`);
+        console.error(`Error while running seedBackend: ${String(error)}`);
         process.exit(1);
     }
 }

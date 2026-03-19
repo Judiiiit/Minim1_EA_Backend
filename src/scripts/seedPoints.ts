@@ -181,12 +181,12 @@ function mapFeatureToSeedPoint(
 ): SeedPoint {
     const routeName = feature.properties.RouteName;
     if (!Number.isInteger(routeName) || routeName < 1 || routeName > 3) {
-        throw new Error(`RouteName invalido en ${city} (feature id ${feature.id})`);
+        throw new Error(`Invalid RouteName in ${city} (feature id ${feature.id})`);
     }
 
     const coords = feature.geometry.coordinates;
     if (!Array.isArray(coords) || coords.length !== 2) {
-        throw new Error(`Coordenadas invalidas en ${city} (feature id ${feature.id})`);
+        throw new Error(`Invalid coordinates in ${city} (feature id ${feature.id})`);
     }
 
     const [longitude, latitude] = coords;
@@ -210,7 +210,7 @@ function buildSeedPoints(): SeedPoint[] {
     Object.entries(CITY_FEATURE_COLLECTIONS).forEach(([city, featureCollection]) => {
         const routeIdsByCity = CITY_ROUTE_IDS[city];
         if (!routeIdsByCity) {
-            throw new Error(`No hay routeIds configurados para la ciudad ${city}`);
+            throw new Error(`No routeIds configured for city ${city}`);
         }
 
         featureCollection.features.forEach((feature) => {
@@ -225,23 +225,23 @@ function buildSeedPoints(): SeedPoint[] {
 function validateSeedPoints(points: SeedPoint[]) {
     points.forEach((point, index) => {
         if (!point.name || !point.name.trim()) {
-            throw new Error(`name invalido en posicion ${index}`);
+            throw new Error(`Invalid name at index ${index}`);
         }
 
         if (!OBJECT_ID_REGEX.test(point._id)) {
-            throw new Error(`_id invalido en posicion ${index}`);
+            throw new Error(`Invalid _id at index ${index}`);
         }
 
         if (!OBJECT_ID_REGEX.test(point.routeId)) {
-            throw new Error(`routeId invalido en posicion ${index}`);
+            throw new Error(`Invalid routeId at index ${index}`);
         }
 
         if (!Number.isFinite(point.latitude) || !Number.isFinite(point.longitude)) {
-            throw new Error(`lat/lng invalidas en posicion ${index}`);
+            throw new Error(`Invalid lat/lng at index ${index}`);
         }
 
         if (!Number.isInteger(point.index) || point.index < 0) {
-            throw new Error(`index invalido en posicion ${index}`);
+            throw new Error(`Invalid index at index ${index}`);
         }
     });
 }
@@ -250,29 +250,29 @@ async function seedPoints() {
     try {
         const MONGO_URL = process.env.MONGO_URI || '';
         if (!MONGO_URL) {
-            throw new Error('MONGO_URI no esta configurado en .env');
+            throw new Error('MONGO_URI is not configured in .env');
         }
 
         const pointsToInsert = buildSeedPoints();
         validateSeedPoints(pointsToInsert);
 
         await mongoose.connect(MONGO_URL, { retryWrites: true, w: 'majority' });
-        Logging.info('Conexion a MongoDB establecida');
+        Logging.info('MongoDB connection established');
 
         await Point.deleteMany({});
-        Logging.info('Coleccion de puntos vaciada');
+        Logging.info('Points collection cleared');
 
         if (!pointsToInsert.length) {
-            Logging.info('No hay puntos definidos en CITY_FEATURE_COLLECTIONS');
+            Logging.info('No points defined in CITY_FEATURE_COLLECTIONS');
             process.exit(0);
         }
 
         const result = await Point.insertMany(pointsToInsert);
-        Logging.info('' + result.length + ' puntos creados correctamente');
+        Logging.info('' + result.length + ' points created successfully');
 
         process.exit(0);
     } catch (error) {
-        Logging.error(`Error al crear puntos: ${error}`);
+        Logging.error(`Error creating points: ${error}`);
         process.exit(1);
     }
 }

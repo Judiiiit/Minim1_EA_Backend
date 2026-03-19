@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
 export interface IRoute {
-    title: string;
+    name: string;
     description: string;
     city: string;
     country: string;
@@ -9,7 +9,6 @@ export interface IRoute {
     duration: number;
     difficulty: 'easy' | 'medium' | 'hard';
     tags: string[];
-    image?: string;
     userId: string;
 }
 
@@ -17,7 +16,7 @@ export interface IRouteModel extends IRoute, Document {}
 
 const RouteSchema: Schema = new Schema(
     {
-        title: { type: String, required: true },
+        name: { type: String, required: true },
         description: { type: String, required: true },
         city: { type: String, required: true },
         country: { type: String, required: true },
@@ -29,7 +28,6 @@ const RouteSchema: Schema = new Schema(
             required: true
         },
         tags: [{ type: String }],
-        image: { type: String },
         userId: {
             type: Schema.Types.ObjectId,
             ref: 'User',
@@ -39,6 +37,7 @@ const RouteSchema: Schema = new Schema(
     {
         timestamps: true,
         versionKey: false,
+        id: false,
         toJSON: {
             virtuals: true
         },
@@ -51,7 +50,8 @@ const RouteSchema: Schema = new Schema(
 RouteSchema.virtual('points', {
     ref: 'Point',
     localField: '_id',
-    foreignField: 'routeId'
+    foreignField: 'routeId',
+    options: { sort: { index: 1 } }
 });
 
 export default mongoose.model<IRouteModel>('Route', RouteSchema);

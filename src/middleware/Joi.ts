@@ -35,7 +35,7 @@ export const Schemas = {
 
     Route: {
         create: Joi.object({
-            title: Joi.string().required(),
+            name: Joi.string().required(),
             description: Joi.string().required(),
             city: Joi.string().required(),
             country: Joi.string().required(),
@@ -43,12 +43,11 @@ export const Schemas = {
             duration: Joi.number().required(),
             difficulty: Joi.string().valid('easy', 'medium', 'hard').required(),
             tags: Joi.array().items(Joi.string()).optional(),
-            image: Joi.string().optional(),
             userId: Joi.string().pattern(/^[0-9a-fA-F]{24}$/).required()
         }),
 
         update: Joi.object({
-            title: Joi.string().optional(),
+            name: Joi.string().optional(),
             description: Joi.string().optional(),
             city: Joi.string().optional(),
             country: Joi.string().optional(),
@@ -56,7 +55,6 @@ export const Schemas = {
             duration: Joi.number().optional(),
             difficulty: Joi.string().valid('easy', 'medium', 'hard').optional(),
             tags: Joi.array().items(Joi.string()).optional(),
-            image: Joi.string().optional(),
             userId: Joi.string().pattern(/^[0-9a-fA-F]{24}$/).optional()
         }).min(1)
     },

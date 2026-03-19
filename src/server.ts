@@ -41,6 +41,11 @@ const StartServer = () => {
     router.use(express.urlencoded({ extended: true }));
     router.use(express.json());
 
+    router.use((req, res, next) => {
+        req.url = req.url.replace(/\/+/g, '/');
+        next();
+    });
+
     /** Rules of our API */
     router.use(cors());
 
@@ -48,9 +53,9 @@ const StartServer = () => {
     router.use('/api', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
     /** Routes */
-    router.use('/Users', UserRoutes);
-    router.use('/Routes', RouteRoutes);
-    router.use('/Points', PointRoutes);
+    router.use('/users', UserRoutes);
+    router.use('/routes', RouteRoutes);
+    router.use('/points', PointRoutes);
 
     /** Healthcheck */
     router.get('/ping', (req, res, next) => res.status(200).json({ hello: 'world' }));

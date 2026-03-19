@@ -7,7 +7,7 @@ dotenv.config();
 
 type SeedRoute = {
     _id: string;
-    title?: string;
+    name?: string;
     description: string;
     city: string;
     country: string;
@@ -15,88 +15,81 @@ type SeedRoute = {
     duration?: number;
     difficulty: 'easy' | 'medium' | 'hard';
     tags?: string[];
-    image?: string;
     userId: string;
 };
 
 const SEED_ROUTES: SeedRoute[] = [
     {
         _id: '66f000000000000000000001',
+        name: 'Family route through Galicia',
+        description: 'Family route through Galicia. A calm and enjoyable itinerary to discover charming spots, local culture, and memorable moments together.',
         userId: '65f000000000000000000078',
         difficulty: 'medium',
         city: 'Galicia',
         country: 'Spain',
-        description: 'Ruta en familia por galicia',
-        title: '',
         distance: undefined,
         duration: undefined,
-        tags: [],
-        image: ''
+        tags: []
     },
     {
         _id: '66f000000000000000000002',
+        name: 'Unplug and relax route through Galicia',
+        description: 'Unplug and relax route through Galicia. A peaceful escape designed to slow down, enjoy the scenery and reconnect with nature and yourself.',
         userId: '65f00000000000000000007a',
         difficulty: 'medium',
         city: 'Galicia',
         country: 'Spain',
-        description: 'Ruta de desconexion por galicia',
-        title: '',
         distance: undefined,
         duration: undefined,
-        tags: [],
-        image: ''
+        tags: []
     },
     {
         _id: '66f000000000000000000003',
+        name: 'Friends route through Galicia',
+        description: 'Friends route through Galicia. A fun plan to share good food, great views, and unforgettable moments with your group.',
         userId: '65f00000000000000000007b',
         difficulty: 'medium',
         city: 'Galicia',
         country: 'Spain',
-        description: 'Ruta con amigos por galicia',
-        title: '',
         distance: undefined,
         duration: undefined,
-        tags: [],
-        image: ''
+        tags: []
     },
     {
         _id: '66f000000000000000000004',
+        name: 'Rediscover the beauty of Valencia',
+        description: 'Rediscover the beauty of Valencia. A route created to admire its character, vibrant streets, and the charm that makes the city special.',
         userId: '65f0000000000000000000c8',
         difficulty: 'medium',
         city: 'Valencia',
         country: 'Spain',
-        description: 'Redescubre la belleza de Valencia',
-        title: '',
         distance: undefined,
         duration: undefined,
-        tags: [],
-        image: ''
+        tags: []
     },
     {
         _id: '66f000000000000000000005',
+        name: 'Bachelor party in Valencia',
+        description: 'Bachelor party in Valencia. An energetic route with lively places, great atmosphere, and plans made for celebrating in style.',
         userId: '65f0000000000000000000c8',
         difficulty: 'medium',
         city: 'Valencia',
         country: 'Spain',
-        description: 'Despedida de soltero en Valencia',
-        title: '',
         distance: undefined,
         duration: undefined,
-        tags: [],
-        image: ''
+        tags: []
     },
     {
         _id: '66f000000000000000000006',
+        name: 'Visit Valencia with kids',
+        description: 'Visit Valencia with kids. A family-friendly route with entertaining stops, open spaces, and activities everyone can enjoy.',
         userId: '65f0000000000000000000aa',
         difficulty: 'medium',
         city: 'Valencia',
         country: 'Spain',
-        description: 'Visita Valencia con ninos',
-        title: '',
         distance: undefined,
         duration: undefined,
-        tags: [],
-        image: ''
+        tags: []
     },
     {
         _id: '66f000000000000000000007',
@@ -104,64 +97,59 @@ const SEED_ROUTES: SeedRoute[] = [
         difficulty: 'medium',
         city: 'Sevilla',
         country: 'Spain',
-        description: 'Sevilla con encanto',
-        title: '',
+        name: 'Charming Seville',
+        description: 'Charming Seville. A route to experience its warm atmosphere, beautiful corners, and the essence that makes the city unforgettable.',
         distance: undefined,
         duration: undefined,
-        tags: [],
-        image: ''
+        tags: []
     },
     {
         _id: '66f000000000000000000008',
+        name: 'Monuments of Seville',
+        description: 'Monuments of Seville. An ideal itinerary to explore historic landmarks, impressive architecture, and the city\'s rich heritage.',
         userId: '65f0000000000000000000a0',
         difficulty: 'medium',
         city: 'Sevilla',
         country: 'Spain',
-        description: 'Monumentos de Sevilla',
-        title: '',
         distance: undefined,
         duration: undefined,
-        tags: [],
-        image: ''
+        tags: []
     },
     {
         _id: '66f000000000000000000009',
+        name: 'Party route through Seville',
+        description: 'Party route through Seville. A vibrant route packed with nightlife, music, and places perfect for an exciting evening out.',
         userId: '65f0000000000000000000a3',
         difficulty: 'medium',
         city: 'Sevilla',
         country: 'Spain',
-        description: 'De fiesta por sevilla',
-        title: '',
         distance: undefined,
         duration: undefined,
-        tags: [],
-        image: ''
+        tags: []
     },
     {
         _id: '66f00000000000000000000a',
+        name: 'Madrid in black and white',
+        description: 'Madrid in black and white. A route with a classic feel, perfect for discovering timeless streets, culture, and elegant city views.',
         userId: '65f000000000000000000098',
         difficulty: 'easy',
         city: 'Madrid',
         country: 'Spain',
-        description: 'Madrid en blanco y negro',
-        title: '',
         distance: undefined,
         duration: undefined,
-        tags: [],
-        image: ''
+        tags: []
     },
     {
         _id: '66f00000000000000000000b',
+        name: 'Modernist Madrid',
+        description: 'Modernist Madrid. A route focused on contemporary style, creative spaces, and the most modern side of the capital.',
         userId: '65f00000000000000000009d',
         difficulty: 'easy',
         city: 'Madrid',
         country: 'Spain',
-        description: 'Madrid modernista',
-        title: '',
         distance: undefined,
         duration: undefined,
-        tags: [],
-        image: ''
+        tags: []
     },
     {
         _id: '66f00000000000000000000c',
@@ -169,51 +157,47 @@ const SEED_ROUTES: SeedRoute[] = [
         difficulty: 'hard',
         city: 'Madrid',
         country: 'Spain',
-        description: 'Madrid en color',
-        title: '',
+        name: 'Madrid in color',
+        description: 'Madrid in color. A lively itinerary full of energy, diverse neighborhoods, and vibrant places that showcase the city personality.',
         distance: undefined,
         duration: undefined,
-        tags: [],
-        image: ''
+        tags: []
     },
     {
         _id: '66f00000000000000000000d',
+        name: 'Gaudi for a day',
+        description: 'Gaudi for a day. A route to immerse yourself in iconic architecture, artistic details, and the unique spirit of Barcelona.',
         userId: '65f000000000000000000099',
         difficulty: 'easy',
         city: 'Barcelona',
         country: 'Spain',
-        description: 'Gaudi por un dia',
-        title: '',
         distance: undefined,
         duration: undefined,
-        tags: [],
-        image: ''
+        tags: []
     },
     {
         _id: '66f00000000000000000000e',
+        name: 'Sunset in Montjuic',
+        description: 'Sunset in Montjuic. A scenic route designed to enjoy panoramic views, relaxing walks, and a memorable end of day.',
         userId: '65f0000000000000000000a8',
         difficulty: 'easy',
         city: 'Barcelona',
         country: 'Spain',
-        description: 'Anochecer en Montjuic',
-        title: '',
         distance: undefined,
         duration: undefined,
-        tags: [],
-        image: ''
+        tags: []
     },
     {
         _id: '66f00000000000000000000f',
+        name: 'The charms of Pedralbes',
+        description: 'The charms of Pedralbes. A route through one of Barcelona\'s most elegant areas, with peaceful surroundings and refined spots to discover.',
         userId: '65f00000000000000000009d',
         difficulty: 'easy',
         city: 'Barcelona',
         country: 'Spain',
-        description: 'Los encantos de Pedralbes',
-        title: '',
         distance: undefined,
         duration: undefined,
-        tags: [],
-        image: ''
+        tags: []
     }
 ];
 
@@ -223,22 +207,22 @@ const OBJECT_ID_REGEX = /^[0-9a-fA-F]{24}$/;
 function validateSeedRoutes(routes: SeedRoute[]) {
     routes.forEach((route, index) => {
         if (!ALLOWED_DIFFICULTIES.has(route.difficulty)) {
-            throw new Error('Ruta invalida en posicion ' + index);
+            throw new Error('Invalid route at index ' + index);
         }
 
         if (!OBJECT_ID_REGEX.test(route.userId)) {
-            throw new Error('userId invalido en posicion ' + index);
+            throw new Error('Invalid userId at index ' + index);
         }
 
         if (!OBJECT_ID_REGEX.test(route._id)) {
-            throw new Error('_id invalido en posicion ' + index);
+            throw new Error('Invalid _id at index ' + index);
         }
     });
 }
 
 function isCompleteRoute(route: SeedRoute): boolean {
     const hasRequiredStrings =
-        !!route.title &&
+        !!route.name &&
         !!route.description &&
         !!route.city &&
         !!route.country &&
@@ -254,7 +238,7 @@ function isCompleteRoute(route: SeedRoute): boolean {
 function mapToInsertableRoute(route: SeedRoute) {
     return {
         _id: route._id,
-        title: route.title && route.title.trim().length > 0 ? route.title : ' ',
+        name: route.name && route.name.trim().length > 0 ? route.name : ' ',
         description: route.description && route.description.trim().length > 0 ? route.description : ' ',
         city: route.city && route.city.trim().length > 0 ? route.city : ' ',
         country: route.country && route.country.trim().length > 0 ? route.country : ' ',
@@ -262,7 +246,6 @@ function mapToInsertableRoute(route: SeedRoute) {
         duration: typeof route.duration === 'number' ? route.duration : 0,
         difficulty: route.difficulty,
         tags: route.tags || [],
-        image: route.image,
         userId: route.userId
     };
 }
@@ -271,29 +254,29 @@ async function seedRoutes() {
     try {
         const MONGO_URL = process.env.MONGO_URI || '';
         if (!MONGO_URL) {
-            throw new Error('MONGO_URI no esta configurado en .env');
+            throw new Error('MONGO_URI is not configured in .env');
         }
 
         await mongoose.connect(MONGO_URL, { retryWrites: true, w: 'majority' });
-        Logging.info('Conexion a MongoDB establecida');
+        Logging.info('MongoDB connection established');
 
         await Route.deleteMany({});
-        Logging.info('Coleccion de rutas vaciada');
+        Logging.info('Routes collection cleared');
 
         validateSeedRoutes(SEED_ROUTES);
 
         if (!SEED_ROUTES.length) {
-            Logging.info('No hay rutas definidas en SEED_ROUTES');
+            Logging.info('No routes defined in SEED_ROUTES');
             process.exit(0);
         }
 
         const routesToInsert = SEED_ROUTES.map(mapToInsertableRoute);
         const result = await Route.insertMany(routesToInsert);
-        Logging.info('' + result.length + ' rutas creadas correctamente');
+        Logging.info('' + result.length + ' routes created successfully');
 
         process.exit(0);
     } catch (error) {
-        Logging.error(`Error al crear rutas: ${error}`);
+        Logging.error(`Error creating routes: ${error}`);
         process.exit(1);
     }
 }

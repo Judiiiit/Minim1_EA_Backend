@@ -223,14 +223,14 @@ async function seedUsers() {
     try {
         const MONGO_URL = process.env.MONGO_URI || ''; 
         if (!MONGO_URL) {
-            throw new Error('MONGO_URI no esta configurado en .env');
+            throw new Error('MONGO_URI is not configured in .env');
         }
 
         await mongoose.connect(MONGO_URL, { retryWrites: true, w: 'majority' });
-        Logging.info('Conexion a MongoDB establecida');
+        Logging.info('MongoDB connection established');
 
         await User.deleteMany({});
-        Logging.info('Coleccion de usuarios vaciada');
+        Logging.info('Users collection cleared');
 
         const usersToInsert = await Promise.all(
             SEED_USERS.map(async (user) => ({
@@ -245,14 +245,14 @@ async function seedUsers() {
         );
 
         const result = await User.insertMany(usersToInsert);
-        Logging.info('' + result.length + ' usuarios creados correctamente');
-        Logging.info('  - 175 usuarios con enabled = true');
-        Logging.info('  - 25 usuarios con enabled = false');
-        Logging.info('  - Formato email: seed.userXXX.t2g@yopmail.com');
+        Logging.info('' + result.length + ' users created successfully');
+        Logging.info('  - 175 users with enabled = true');
+        Logging.info('  - 25 users with enabled = false');
+        Logging.info('  - Email format: seed.userXXX.t2g@yopmail.com');
 
         process.exit(0);
     } catch (error) {
-        Logging.error(`Error al crear usuarios: ${error}`);
+        Logging.error(`Error creating users: ${error}`);
         process.exit(1);
     }
 }

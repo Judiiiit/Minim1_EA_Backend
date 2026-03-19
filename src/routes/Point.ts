@@ -8,7 +8,7 @@ const router = express.Router();
  * @openapi
  * tags:
  *   - name: points
- *     description: Endpoints CRUD de Points
+ *     description: CRUD endpoints for Points
  *
  * components:
  *   schemas:
@@ -108,28 +108,56 @@ const router = express.Router();
 /**
  * @openapi
  * /points:
- *   post:
- *     summary: Crea un Point
+ *   get:
+ *     summary: List all Points
  *     tags: [points]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/PointCreate'
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         required: false
+ *         schema:
+ *           type: integer
+ *           enum: [10, 25, 50]
+ *         description: Page size. Use together with page to enable pagination.
+ *       - in: query
+ *         name: page
+ *         required: false
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *         description: Page number. Use together with limit to enable pagination.
  *     responses:
- *       201:
- *         description: Creado
- *       422:
- *         description: Validación fallida (Joi)
+ *       200:
+ *         description: OK. If limit and page are omitted, returns the full list.
  */
-router.post('/', ValidateJoi(Schemas.Point.create), controller.createPoint);
+router.get('/', controller.readAll);
+
+/**
+ * @openapi
+ * /points/{pointId}:
+ *   get:
+ *     summary: Get a Point by ID
+ *     tags: [points]
+ *     parameters:
+ *       - in: path
+ *         name: pointId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Point ObjectId
+ *     responses:
+ *       200:
+ *         description: OK
+ *       404:
+ *         description: Not found
+ */
+router.get('/:pointId', controller.readPoint);
 
 /**
  * @openapi
  * /points/route/{routeId}:
  *   get:
- *     summary: Lista todos los Points de una Route
+ *     summary: List all Points for a Route
  *     tags: [points]
  *     parameters:
  *       - in: path
@@ -137,7 +165,7 @@ router.post('/', ValidateJoi(Schemas.Point.create), controller.createPoint);
  *         required: true
  *         schema:
  *           type: string
- *         description: ObjectId de la Route
+ *         description: Route ObjectId
  *     responses:
  *       200:
  *         description: OK
@@ -147,41 +175,28 @@ router.get('/route/:routeId', controller.readByRoute);
 /**
  * @openapi
  * /points:
- *   get:
- *     summary: Lista todos los Points
+ *   post:
+ *     summary: Create a Point
  *     tags: [points]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/PointCreate'
  *     responses:
- *       200:
- *         description: OK
+ *       201:
+ *         description: Created
+ *       422:
+ *         description: Validation failed (Joi)
  */
-router.get('/', controller.readAll);
-
-/**
- * @openapi
- * /points/{pointId}:
- *   get:
- *     summary: Obtiene un Point por ID
- *     tags: [points]
- *     parameters:
- *       - in: path
- *         name: pointId
- *         required: true
- *         schema:
- *           type: string
- *         description: ObjectId del Point
- *     responses:
- *       200:
- *         description: OK
- *       404:
- *         description: No encontrado
- */
-router.get('/:pointId', controller.readPoint);
+router.post('/', ValidateJoi(Schemas.Point.create), controller.createPoint);
 
 /**
  * @openapi
  * /points/{pointId}:
  *   put:
- *     summary: Actualiza un Point por ID
+ *     summary: Update a Point by ID
  *     tags: [points]
  *     parameters:
  *       - in: path
@@ -189,7 +204,7 @@ router.get('/:pointId', controller.readPoint);
  *         required: true
  *         schema:
  *           type: string
- *         description: ObjectId del Point
+ *         description: Point ObjectId
  *     requestBody:
  *       required: true
  *       content:
@@ -198,11 +213,11 @@ router.get('/:pointId', controller.readPoint);
  *             $ref: '#/components/schemas/PointUpdate'
  *     responses:
  *       200:
- *         description: Actualizado
+ *         description: Updated
  *       404:
- *         description: No encontrado
+ *         description: Not found
  *       422:
- *         description: Validación fallida (Joi)
+ *         description: Validation failed (Joi)
  */
 router.put('/:pointId', ValidateJoi(Schemas.Point.update), controller.updatePoint);
 
@@ -210,7 +225,7 @@ router.put('/:pointId', ValidateJoi(Schemas.Point.update), controller.updatePoin
  * @openapi
  * /points/{pointId}:
  *   delete:
- *     summary: Elimina un Point por ID
+ *     summary: Delete a Point by ID
  *     tags: [points]
  *     parameters:
  *       - in: path
@@ -218,12 +233,12 @@ router.put('/:pointId', ValidateJoi(Schemas.Point.update), controller.updatePoin
  *         required: true
  *         schema:
  *           type: string
- *         description: ObjectId del Point
+ *         description: Point ObjectId
  *     responses:
  *       200:
  *         description: OK
  *       404:
- *         description: No encontrado
+ *         description: Not found
  */
 router.delete('/:pointId', controller.deletePoint);
 

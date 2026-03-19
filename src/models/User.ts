@@ -28,6 +28,7 @@ const UserSchema: Schema = new Schema(
     {
         timestamps: true,
         versionKey: false,
+        id: false,
         toJSON: {
             virtuals: true,
             transform: function (doc, ret) {
@@ -47,7 +48,8 @@ const UserSchema: Schema = new Schema(
 UserSchema.virtual('routes', {
     ref: 'Route',
     localField: '_id',
-    foreignField: 'userId'
+    foreignField: 'userId',
+    select: 'name _id'
 });
 
 /**
