@@ -26,8 +26,8 @@ const readRoute = async (req: Request, res: Response, next: NextFunction) => {
 
 const readAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { limit, page } = parsePagination(req.query);
-        const routes = await RouteService.getAllRoutes({ limit, page });
+        const pagination = parsePagination(req.query);
+        const routes = await RouteService.getAllRoutes(pagination);
         return res.status(200).json(routes);
     } catch (error) {
         return res.status(500).json({ error });

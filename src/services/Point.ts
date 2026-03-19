@@ -11,6 +11,8 @@ type PaginatedResult<T> = {
     };
 };
 
+type ListResult<T> = PaginatedResult<T> | T[];
+
 const createPoint = async (input: IPoint) => {
     const point = new PointModel(input);
     return await point.save();
@@ -20,11 +22,17 @@ const getPoint = async (pointId: string) => {
     return await PointModel.findById(pointId).exec();
 };
 
-const getAllPoints = async ({ limit, page }: PaginationParams): Promise<PaginatedResult<IPoint>> => {
+const getAllPoints = async (pagination?: PaginationParams): Promise<ListResult<IPoint>> => {
+    if (!pagination) {
+        return await PointModel.find().sort({ _id: 1 }).exec();
+    }
+
+    const { limit, page } = pagination;
+
     const skip = (page - 1) * limit;
 
     const [data, total] = await Promise.all([
-        PointModel.find().sort({ index: 1 }).skip(skip).limit(limit).exec(),
+        PointModel.find().sort({ _id: 1 }).skip(skip).limit(limit).exec(),
         PointModel.countDocuments()
     ]);
 

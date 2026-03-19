@@ -8,7 +8,7 @@ const router = express.Router();
  * @openapi
  * tags:
  *   - name: routes
- *     description: Endpoints CRUD de Routes
+ *     description: CRUD endpoints for Routes
  *
  * components:
  *   schemas:
@@ -138,8 +138,56 @@ const router = express.Router();
 /**
  * @openapi
  * /routes:
+ *   get:
+ *     summary: List all Routes
+ *     tags: [routes]
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         required: false
+ *         schema:
+ *           type: integer
+ *           enum: [10, 25, 50]
+ *         description: Page size. Use together with page to enable pagination.
+ *       - in: query
+ *         name: page
+ *         required: false
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *         description: Page number. Use together with limit to enable pagination.
+ *     responses:
+ *       200:
+ *         description: OK. If limit and page are omitted, returns the full list.
+ */
+router.get('/', controller.readAll);
+
+/**
+ * @openapi
+ * /routes/{routeId}:
+ *   get:
+ *     summary: Get a Route by ID
+ *     tags: [routes]
+ *     parameters:
+ *       - in: path
+ *         name: routeId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Route ObjectId
+ *     responses:
+ *       200:
+ *         description: OK
+ *       404:
+ *         description: Not found
+ */
+router.get('/:RouteId', controller.readRoute);
+
+/**
+ * @openapi
+ * /routes:
  *   post:
- *     summary: Crea una Route
+ *     summary: Create a Route
  *     tags: [routes]
  *     requestBody:
  *       required: true
@@ -149,50 +197,17 @@ const router = express.Router();
  *             $ref: '#/components/schemas/RouteCreate'
  *     responses:
  *       201:
- *         description: Creada
+ *         description: Created
  *       422:
- *         description: Validación fallida (Joi)
+ *         description: Validation failed (Joi)
  */
 router.post('/', ValidateJoi(Schemas.Route.create), controller.createRoute);
 
 /**
  * @openapi
  * /routes/{routeId}:
- *   get:
- *     summary: Obtiene una Route por ID
- *     tags: [routes]
- *     parameters:
- *       - in: path
- *         name: routeId
- *         required: true
- *         schema:
- *           type: string
- *         description: ObjectId de la Route
- *     responses:
- *       200:
- *         description: OK
- *       404:
- *         description: No encontrada
- */
-router.get('/:RouteId', controller.readRoute);
-
-/**
- * @openapi
- * /routes:
- *   get:
- *     summary: Lista todas las Routes
- *     tags: [routes]
- *     responses:
- *       200:
- *         description: OK
- */
-router.get('/', controller.readAll);
-
-/**
- * @openapi
- * /routes/{routeId}:
  *   put:
- *     summary: Actualiza una Route por ID
+ *     summary: Update a Route by ID
  *     tags: [routes]
  *     parameters:
  *       - in: path
@@ -200,7 +215,7 @@ router.get('/', controller.readAll);
  *         required: true
  *         schema:
  *           type: string
- *         description: ObjectId de la Route
+ *         description: Route ObjectId
  *     requestBody:
  *       required: true
  *       content:
@@ -209,11 +224,11 @@ router.get('/', controller.readAll);
  *             $ref: '#/components/schemas/RouteUpdate'
  *     responses:
  *       200:
- *         description: Actualizada
+ *         description: Updated
  *       404:
- *         description: No encontrada
+ *         description: Not found
  *       422:
- *         description: Validación fallida (Joi)
+ *         description: Validation failed (Joi)
  */
 router.put('/:RouteId', ValidateJoi(Schemas.Route.update), controller.updateRoute);
 
@@ -221,7 +236,7 @@ router.put('/:RouteId', ValidateJoi(Schemas.Route.update), controller.updateRout
  * @openapi
  * /routes/{routeId}:
  *   delete:
- *     summary: Elimina una Route por ID
+ *     summary: Delete a Route by ID
  *     tags: [routes]
  *     parameters:
  *       - in: path
@@ -229,12 +244,12 @@ router.put('/:RouteId', ValidateJoi(Schemas.Route.update), controller.updateRout
  *         required: true
  *         schema:
  *           type: string
- *         description: ObjectId de la Route
+ *         description: Route ObjectId
  *     responses:
  *       200:
  *         description: OK
  *       404:
- *         description: No encontrada
+ *         description: Not found
  */
 router.delete('/:RouteId', controller.deleteRoute);
 

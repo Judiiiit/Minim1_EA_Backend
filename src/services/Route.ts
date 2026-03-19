@@ -18,6 +18,8 @@ type PaginatedResult<T> = {
     };
 };
 
+type ListResult<T> = PaginatedResult<T> | T[];
+
 const createRoute = async (input: IRoute) => {
     const route = new RouteModel(input);
     return await route.save();
@@ -27,11 +29,16 @@ const getRoute = async (routeId: string) => {
     return await RouteModel.findById(routeId).populate('points').exec();
 };
 
-const getAllRoutes = async ({ limit, page }: PaginationParams): Promise<PaginatedResult<IRoute>> => {
+const getAllRoutes = async (pagination?: PaginationParams): Promise<ListResult<IRoute>> => {
+    if (!pagination) {
+        return await RouteModel.find().sort({ _id: 1 }).populate('points').exec();
+    }
+
+    const { limit, page } = pagination;
     const skip = (page - 1) * limit;
 
     const [data, total] = await Promise.all([
-        RouteModel.find().skip(skip).limit(limit).populate('points').exec(),
+        RouteModel.find().sort({ _id: 1 }).skip(skip).limit(limit).populate('points').exec(),
         RouteModel.countDocuments()
     ]);
 

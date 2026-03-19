@@ -20,6 +20,8 @@ type PaginatedResult<T> = {
     };
 };
 
+type ListResult<T> = PaginatedResult<T> | T[];
+
 const createUser = async (data: Partial<IUser>): Promise<IUserModel> => {
     const user = new User({
         _id: new mongoose.Types.ObjectId(),
@@ -32,11 +34,16 @@ const getUser = async (userId: string): Promise<IUserModel | null> => {
     return await User.findById(userId).populate('routes');
 };
 
-const getAllUsers = async ({ limit, page }: PaginationParams): Promise<PaginatedResult<IUserModel>> => {
+const getAllUsers = async (pagination?: PaginationParams): Promise<ListResult<IUserModel>> => {
+    if (!pagination) {
+        return await User.find().sort({ _id: 1 }).populate('routes');
+    }
+
+    const { limit, page } = pagination;
     const skip = (page - 1) * limit;
 
     const [data, total] = await Promise.all([
-        User.find().skip(skip).limit(limit).populate('routes'),
+        User.find().sort({ _id: 1 }).skip(skip).limit(limit).populate('routes'),
         User.countDocuments()
     ]);
 
