@@ -1,7 +1,6 @@
 import express from 'express';
 import controller from '../controllers/User';
 import { Schemas, ValidateJoi } from '../middleware/Joi';
-import { authenticateToken, authorizeRoles } from '../middleware/auth';
 
 const router = express.Router();
 
@@ -122,9 +121,6 @@ const router = express.Router();
  *         description: Validation failed (Joi)
  */
 router.post('/', ValidateJoi(Schemas.User.create), controller.createUser);
-
-router.use(authenticateToken);
-router.use(authorizeRoles('admin'));
 
 /**
  * @openapi
