@@ -5,13 +5,15 @@ import { AuthRequest } from '../middleware/auth';
 
 const createRoute = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
-        if (!req.user) {
-            return res.status(401).json({ message: 'Usuario no autenticado' });
+        const userId = req.user?.id ?? req.body.userId;
+
+        if (!userId) {
+            return res.status(422).json({ message: 'userId is required' });
         }
 
         const savedRoute = await RouteService.createRoute({
             ...req.body,
-            userId: req.user.id
+            userId
         });
 
         return res.status(201).json(savedRoute);

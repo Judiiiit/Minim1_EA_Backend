@@ -50,7 +50,10 @@ export const Schemas = {
             distance: Joi.number().required(),
             duration: Joi.number().required(),
             difficulty: Joi.string().valid('easy', 'medium', 'hard').required(),
-            tags: Joi.array().items(Joi.string()).optional()
+            tags: Joi.array().items(Joi.string()).optional(),
+            userId: Joi.string()
+                .pattern(/^[0-9a-fA-F]{24}$/)
+                .optional()
         }),
 
         update: Joi.object({
