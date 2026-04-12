@@ -1,11 +1,6 @@
 import express from 'express';
 import controller from '../controllers/Point';
 import { Schemas, ValidateJoi } from '../middleware/Joi';
-import {
-    authenticateToken,
-    authorizePointOwnerOrAdmin,
-    authorizePointRouteOwnerOrAdmin
-} from '../middleware/auth';
 
 const router = express.Router();
 
@@ -110,8 +105,6 @@ const router = express.Router();
  *           example: 1
  */
 
-router.use(authenticateToken);
-
 /**
  * @openapi
  * /points:
@@ -215,7 +208,7 @@ router.get('/:pointId', controller.readPoint);
  *       403:
  *         description: Forbidden
  */
-router.post('/', ValidateJoi(Schemas.Point.create), authorizePointRouteOwnerOrAdmin, controller.createPoint);
+router.post('/', ValidateJoi(Schemas.Point.create), controller.createPoint);
 
 /**
  * @openapi
@@ -250,7 +243,7 @@ router.post('/', ValidateJoi(Schemas.Point.create), authorizePointRouteOwnerOrAd
  *       403:
  *         description: Forbidden
  */
-router.put('/:pointId', authorizePointOwnerOrAdmin, ValidateJoi(Schemas.Point.update), controller.updatePoint);
+router.put('/:pointId', ValidateJoi(Schemas.Point.update), controller.updatePoint);
 
 /**
  * @openapi
@@ -277,6 +270,6 @@ router.put('/:pointId', authorizePointOwnerOrAdmin, ValidateJoi(Schemas.Point.up
  *       403:
  *         description: Forbidden
  */
-router.delete('/:pointId', authorizePointOwnerOrAdmin, controller.deletePoint);
+router.delete('/:pointId', controller.deletePoint);
 
 export default router;

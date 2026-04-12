@@ -1,7 +1,6 @@
 import express from 'express';
 import controller from '../controllers/Route';
 import { Schemas, ValidateJoi } from '../middleware/Joi';
-import { authenticateToken, authorizeRouteOwnerOrAdmin } from '../middleware/auth';
 
 const router = express.Router();
 
@@ -128,8 +127,6 @@ const router = express.Router();
  *           example: ["montaña", "naturaleza"]
  */
 
-router.use(authenticateToken);
-
 /**
  * @openapi
  * /routes:
@@ -243,7 +240,7 @@ router.post('/', ValidateJoi(Schemas.Route.create), controller.createRoute);
  *       403:
  *         description: Forbidden
  */
-router.put('/:routeId', authorizeRouteOwnerOrAdmin, ValidateJoi(Schemas.Route.update), controller.updateRoute);
+router.put('/:routeId', ValidateJoi(Schemas.Route.update), controller.updateRoute);
 
 /**
  * @openapi
@@ -270,6 +267,6 @@ router.put('/:routeId', authorizeRouteOwnerOrAdmin, ValidateJoi(Schemas.Route.up
  *       403:
  *         description: Forbidden
  */
-router.delete('/:routeId', authorizeRouteOwnerOrAdmin, controller.deleteRoute);
+router.delete('/:routeId', controller.deleteRoute);
 
 export default router;
