@@ -94,5 +94,44 @@ export const Schemas = {
                 .optional(),
             index: Joi.number().integer().min(0).optional()
         }).min(1)
+    },
+
+    Review: {
+        create: Joi.object({
+            routeId: Joi.string()
+                .pattern(/^[0-9a-fA-F]{24}$/)
+                .required(),
+            userId: Joi.string()
+                .pattern(/^[0-9a-fA-F]{24}$/)
+                .optional(),
+            title: Joi.string().required(),
+            comment: Joi.string().allow('').optional(),
+            ratings: Joi.array()
+                .items(
+                    Joi.object({
+                        label: Joi.string().required(),
+                        score: Joi.number().min(0).max(5).required()
+                    })
+                )
+                .min(1)
+                .required()
+        }),
+
+        update: Joi.object({
+            routeId: Joi.string()
+                .pattern(/^[0-9a-fA-F]{24}$/)
+                .optional(),
+            title: Joi.string().optional(),
+            comment: Joi.string().allow('').optional(),
+            ratings: Joi.array()
+                .items(
+                    Joi.object({
+                        label: Joi.string().required(),
+                        score: Joi.number().min(0).max(5).required()
+                    })
+                )
+                .min(1)
+                .optional()
+        }).min(1)
     }
 };

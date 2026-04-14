@@ -1,5 +1,6 @@
 import RouteModel, { IRoute } from '../models/Route';
 import PointModel from '../models/Point';
+import ReviewModel from '../models/Review';
 
 type PaginationLimit = 10 | 25 | 50;
 
@@ -20,30 +21,71 @@ type PaginatedResult<T> = {
 
 type ListResult<T> = PaginatedResult<T> | T[];
 
+const calculateRatingAverage = async (routeId: string) => {
+    const reviews = await ReviewModel.find({ routeId }).exec();
+
+    let total = 0;
+    let count = 0;
+
+    for (const review of reviews) {
+        for (const rating of review.ratings) {
+            total += rating.score;
+            count++;
+        }
+    }
+
+    return count > 0 ? Number((total / count).toFixed(2)) : 0;
+};
+
+const addAverageToRoute = async (route: any) => {
+    const routeObject = route.toObject ? route.toObject() : route;
+    const ratingAverage = await calculateRatingAverage(String(routeObject._id));
+
+    return {
+        ...routeObject,
+        ratingAverage
+    };
+};
+
 const createRoute = async (input: IRoute) => {
     const route = new RouteModel(input);
     return await route.save();
 };
 
 const getRoute = async (routeId: string) => {
-    return await RouteModel.findById(routeId).populate('points').exec();
+    const route = await RouteModel.findById(routeId).populate('points').populate('reviews').exec();
+
+    if (!route) {
+        return null;
+    }
+
+    return await addAverageToRoute(route);
 };
 
 const getAllRoutes = async (pagination?: PaginationParams): Promise<ListResult<IRoute>> => {
     if (!pagination) {
-        return await RouteModel.find().sort({ _id: 1 }).populate('points').exec();
+        const routes = await RouteModel.find().sort({ _id: 1 }).populate('points').populate('reviews').exec();
+
+        const routesWithAverage = [];
+        for (const route of routes) {
+            routesWithAverage.push(await addAverageToRoute(route));
+        }
+
+        return routesWithAverage;
     }
 
     const { limit, page } = pagination;
     const skip = (page - 1) * limit;
 
-    const [data, total] = await Promise.all([
-        RouteModel.find().sort({ _id: 1 }).skip(skip).limit(limit).populate('points').exec(),
-        RouteModel.countDocuments()
-    ]);
+    const [data, total] = await Promise.all([RouteModel.find().sort({ _id: 1 }).skip(skip).limit(limit).populate('points').populate('reviews').exec(), RouteModel.countDocuments()]);
+
+    const routesWithAverage = [];
+    for (const route of data) {
+        routesWithAverage.push(await addAverageToRoute(route));
+    }
 
     return {
-        data,
+        data: routesWithAverage,
         pagination: {
             page,
             limit,
@@ -54,13 +96,18 @@ const getAllRoutes = async (pagination?: PaginationParams): Promise<ListResult<I
 };
 
 const updateRoute = async (routeId: string, input: Partial<IRoute>) => {
-    return await RouteModel.findByIdAndUpdate(routeId, input, { new: true })
-        .populate('points')
-        .exec();
+    const updatedRoute = await RouteModel.findByIdAndUpdate(routeId, input, { new: true }).populate('points').populate('reviews').exec();
+
+    if (!updatedRoute) {
+        return null;
+    }
+
+    return await addAverageToRoute(updatedRoute);
 };
 
 const deleteRoute = async (routeId: string) => {
     await PointModel.deleteMany({ routeId }).exec();
+    await ReviewModel.deleteMany({ routeId }).exec();
     return await RouteModel.findByIdAndDelete(routeId).exec();
 };
 

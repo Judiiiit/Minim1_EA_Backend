@@ -8,6 +8,7 @@ import Logging from './library/Logging';
 import UserRoutes from './routes/User';
 import RouteRoutes from './routes/Route';
 import PointRoutes from './routes/Point';
+import ReviewRoutes from './routes/Review';
 import authRoutes from './routes/auth';
 import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from './swagger';
@@ -61,6 +62,7 @@ const StartServer = () => {
     router.use('/users', UserRoutes);
     router.use('/routes', RouteRoutes);
     router.use('/points', PointRoutes);
+    router.use('/reviews', ReviewRoutes);
 
     /** Healthcheck */
     router.get('/ping', (req, res, next) => res.status(200).json({ hello: 'world' }));
